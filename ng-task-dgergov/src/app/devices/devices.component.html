@@ -1,0 +1,36 @@
+<agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]="zoom">
+  <agm-marker-cluster [imagePath]="clusterImage">
+    <agm-marker *ngFor="let marker of devicesMarkers" [latitude]="marker?.content?.lat ? marker.content.lat : null"
+    [longitude]="marker?.content?.lng ? marker.content.lng : null"
+    [title]="marker?.content?.meta ? marker.content.meta.barrierId : ''" [iconUrl]="iconUrl">
+    <agm-info-window>
+      <mat-card class="device-card">
+        <mat-card-header>
+          <div mat-card-avatar class="header-image"></div>
+          <mat-card-title>ID: {{ marker.content.meta ? marker.content.meta.barrierId : 'N/A' }}</mat-card-title>
+          <mat-card-subtitle>Battery: {{ marker.content.battery}} %</mat-card-subtitle>
+          <mat-card-subtitle>fCntUp: {{ marker.content.fCntUp}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Lat: {{ marker?.content?.lat}} / Lng: {{ marker?.content?.lng}}
+          </p>
+          <p>
+            Start Time: {{ marker?.content?.meta?.startUtcTime | date: 'dd/MM/yyyy hh:mm'}}
+          </p>
+          <p>
+            Description: {{ marker?.content?.meta?.description}}
+          </p>
+        </mat-card-content>
+        <mat-list *ngIf="marker.content.barrierMessageBatch" dense>
+          <h3 mat-subheader>Messages</h3>
+          <mat-list-item *ngFor="let message of marker.content.barrierMessageBatch.messages">
+            <h4>{{message.type}}</h4>
+            <p mat-line> {{ message.utcTime | date: 'dd/MM/yyyy hh:mm' }} </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card>
+    </agm-info-window>
+  </agm-marker>
+  </agm-marker-cluster>
+</agm-map>
